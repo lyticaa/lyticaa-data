@@ -1,0 +1,60 @@
+name: Golang CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2.2.1
+        with:
+          version: v1.31
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: lyticaa_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: lyticaa
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      rabbitmq:
+        image: rabbitmq:latest
+        env:
+          RABBITMQ_DEFAULT_PASS: password
+          RABBITMQ_DEFAULT_USER: admin
+        ports:
+          - 4369:4369
+          - 5671:5671
+          - 5672:5672
+          - 25672:25672
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Migrate
+        env:
+          APP_NAME: lyticaa-data
+          DATABASE_URL: postgres://lyticaa:password@localhost:${{ job.services.postgres.ports[5432] }}/lyticaa_test?sslmode=disable
+        run: make migrate
+      - name: Test
+        env:
+          APP_NAME: lyticaa-data
+          CLOUDAMQP_QUEUE_DATA: /Lyticaa/Data
+          CLOUDAMQP_URL: amqp://admin:password@localhost:${{ job.services.rabbitmq.ports[5672] }}
+          DATABASE_URL: postgres://lyticaa:password@localhost:${{ job.services.postgres.ports[5432] }}/lyticaa_test?sslmode=disable
+          ENV: test
+          NEW_RELIC_LICENSE_KEY: 2e6f3a2573f64bde958c77874a519fc8f362NRAL
+          RABBITMQ_DEFAULT_PASS: password
+          RABBITMQ_DEFAULT_USER: admin
+        run: make tests
