@@ -19,5 +19,5 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/tealeg/xlsx v1.0.5
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
-	syreclabs.com/go/faker v1.2.2
+	syreclabs.com/go/faker v1.2.3
 )
