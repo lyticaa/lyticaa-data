@@ -5,7 +5,7 @@ replace github.com/lyticaa/lyticaa-data => ../lyticaa/lyticaa-data
 go 1.14
 
 require (
-	github.com/aws/aws-sdk-go v1.35.22
+	github.com/aws/aws-sdk-go v1.40.1
 	github.com/bufferapp/sqs-worker-go v0.0.0-20181101064454-7e780f286181
 	github.com/getsentry/sentry-go v0.7.0
 	github.com/golang-migrate/migrate/v4 v4.13.0
