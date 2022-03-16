@@ -16,7 +16,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/rs/zerolog v1.20.0
 	github.com/streadway/amqp v1.0.0
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.7.1
 	github.com/tealeg/xlsx v1.0.5
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
 	syreclabs.com/go/faker v1.2.2
